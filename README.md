@@ -5,6 +5,8 @@ dali
 >
 > (i.e. [shapeless] alternative for Scala 2.13 era)
 
+[![Coverage][codecov-badge]](https://codecov.io/gh/MakeNowJust/dali/branch/master)
+
 Features
 ----
 
@@ -27,3 +29,4 @@ MIT License
 [MakeNowJust]: https://github.com/MakeNowJust
 [shapeless]: https://github.com/milessabin/shapeless
 [cats]: https://typelevel.org/cats/
+[codecov-badge]: https://img.shields.io/codecov/c/github/MakeNowJust/dali/master.svg?style=for-the-badge&colorA=FF005E&logo=codecov&logoColor=white
