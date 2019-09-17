@@ -1,4 +1,3 @@
-package codes.quine.labo
 package dali
 
 import data._

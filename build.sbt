@@ -34,7 +34,7 @@ lazy val core = project
     name := "dal-core",
     libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value,
     libraryDependencies += "io.monix" %% "minitest" % "2.6.0" % Test,
-    testFrameworks += new TestFramework("codes.quine.labo.dali.Framework"),
+    testFrameworks += new TestFramework("dali.MinitestFramework"),
     commonSettings
   )
 
@@ -46,7 +46,7 @@ lazy val cats = project
     libraryDependencies += "org.typelevel" %% "cats-laws" % "2.0.0" % Test,
     libraryDependencies += "io.monix" %% "minitest" % "2.6.0" % Test,
     libraryDependencies += "io.monix" %% "minitest-laws" % "2.6.0" % Test,
-    testFrameworks += new TestFramework("codes.quine.labo.dali.Framework"),
+    testFrameworks += new TestFramework("dali.MinitestFramework"),
     commonSettings
   )
   .dependsOn(core, core % "test->test")

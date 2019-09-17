@@ -1,4 +1,3 @@
-package codes.quine.labo
 package dali
 package macros
 
@@ -81,19 +80,19 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     else tq"${t.typeSymbol}[..${t.typeArgs.map(replaceParamType(_, paramType, to))}]"
 
   private[this] def productRepr[A](names: List[A])(cgen: A => Tree, pgen: A => Tree): (Tree, Tree) = {
-    val cons = names.foldRight(q"_root_.codes.quine.labo.dali.HNil": Tree) {
-      case (name, acc) => q"_root_.codes.quine.labo.dali.:*:(${cgen(name)}, $acc)"
+    val cons = names.foldRight(q"_root_.dali.HNil": Tree) {
+      case (name, acc) => q"_root_.dali.:*:(${cgen(name)}, $acc)"
     }
-    val pattern = names.foldRight(pq"_root_.codes.quine.labo.dali.HNil": Tree) {
-      case (name, acc) => pq"_root_.codes.quine.labo.dali.:*:(${pgen(name)}, $acc)"
+    val pattern = names.foldRight(pq"_root_.dali.HNil": Tree) {
+      case (name, acc) => pq"_root_.dali.:*:(${pgen(name)}, $acc)"
     }
 
     (cons, pattern)
   }
 
   private[this] def productReprType(types: List[Tree]): Tree =
-    types.foldRight(tq"_root_.codes.quine.labo.dali.HNil": Tree) {
-      case (t, acc) => tq"_root_.codes.quine.labo.dali.:*:[$t, $acc]"
+    types.foldRight(tq"_root_.dali.HNil": Tree) {
+      case (t, acc) => tq"_root_.dali.:*:[$t, $acc]"
     }
 
   def materialize[A: WeakTypeTag, R]: Tree = {
@@ -127,12 +126,12 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     val argName = TermName(c.freshName("arg$"))
     val className = TypeName(c.freshName("Product$"))
     q"""
-      final class $className extends _root_.codes.quine.labo.dali.Generic[$t] {
+      final class $className extends _root_.dali.Generic[$t] {
         type Repr = $reprType
         def embed($argName: $t): Repr = $argName match { case $pattern => $reprCons }
         def project($argName: Repr): $t = $argName match { case $reprPattern => $cons }
       }
-      new $className: _root_.codes.quine.labo.dali.Generic.Aux[$t, $reprType]
+      new $className: _root_.dali.Generic.Aux[$t, $reprType]
     """
   }
 
@@ -145,34 +144,34 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     val argName = TermName(c.freshName("arg$"))
     val className = TypeName(c.freshName("Singleton$"))
     q"""
-      final class $className extends _root_.codes.quine.labo.dali.Generic[$t] {
-        type Repr = _root_.codes.quine.labo.dali.HNil
-        def embed($argName: $t): Repr = _root_.codes.quine.labo.dali.HNil
+      final class $className extends _root_.dali.Generic[$t] {
+        type Repr = _root_.dali.HNil
+        def embed($argName: $t): Repr = _root_.dali.HNil
         def project($argName: Repr): $t = $singleton
       }
-      new $className: _root_.codes.quine.labo.dali.Generic.Aux[$t, _root_.codes.quine.labo.dali.HNil]
+      new $className: _root_.dali.Generic.Aux[$t, _root_.dali.HNil]
     """
   }
 
   private[this] def materializeCoproduct(t: Type): Tree = {
     val children = childrenOf(t)
 
-    val reprType = children.foldRight(tq"_root_.codes.quine.labo.dali.CNil": Tree) {
-      case (t, acc) => tq"_root_.codes.quine.labo.dali.:+:[$t, $acc]"
+    val reprType = children.foldRight(tq"_root_.dali.CNil": Tree) {
+      case (t, acc) => tq"_root_.dali.:+:[$t, $acc]"
     }
     val cases = children.zipWithIndex.map { case (t, i) => cq"_: $t => $i" }
 
     val argName = TermName(c.freshName("arg$"))
     val className = TypeName(c.freshName("Coproduct$"))
     q"""
-      final class $className extends _root_.codes.quine.labo.dali.Generic[$t] {
+      final class $className extends _root_.dali.Generic[$t] {
         type Repr = $reprType
         def embed($argName: $t): Repr =
-          _root_.codes.quine.labo.dali.Coproduct.unsafeApply($argName match { case ..$cases }, $argName).asInstanceOf[Repr]
+          _root_.dali.Coproduct.unsafeApply($argName match { case ..$cases }, $argName).asInstanceOf[Repr]
         def project($argName: Repr): $t =
-          _root_.codes.quine.labo.dali.Coproduct.unsafeGet($argName).asInstanceOf[$t]
+          _root_.dali.Coproduct.unsafeGet($argName).asInstanceOf[$t]
       }
-      new $className: _root_.codes.quine.labo.dali.Generic.Aux[$t, $reprType]
+      new $className: _root_.dali.Generic.Aux[$t, $reprType]
     """
   }
 
@@ -206,25 +205,25 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     val pattern = pq"$companion(..${elems.map { case (_, name, _) => pq"$name" }})"
 
     val (reprCons, reprPattern) = productRepr(elems)(
-      { case (labelType, name, _) => q"_root_.codes.quine.labo.dali.Labelled[$labelType]($name)" },
-      { case (_, name, _)         => pq"_root_.codes.quine.labo.dali.Labelled($name)" }
+      { case (labelType, name, _) => q"_root_.dali.Labelled[$labelType]($name)" },
+      { case (_, name, _)         => pq"_root_.dali.Labelled($name)" }
     )
 
     val reprType = productReprType(
-      elems.map { case (labelType, _, t) => tq"_root_.codes.quine.labo.dali.Labelled[$labelType, $t]" }
+      elems.map { case (labelType, _, t) => tq"_root_.dali.Labelled[$labelType, $t]" }
     )
 
     val labelType = c.internal.constantType(Constant(t.typeSymbol.name.toString))
     val argName = TermName(c.freshName("arg$"))
     val className = TypeName(c.freshName("LabelledProduct$"))
     return q"""
-      final class $className extends _root_.codes.quine.labo.dali.LabelledGeneric[$t] {
+      final class $className extends _root_.dali.LabelledGeneric[$t] {
         type Repr = $reprType
         def embed($argName: $t): Repr = $argName match { case $pattern => $reprCons }
         def project($argName: Repr): $t = $argName match { case $reprPattern => $cons }
         type Label = $labelType
       }
-      new $className: _root_.codes.quine.labo.dali.LabelledGeneric.Aux[$t, $labelType, $reprType]
+      new $className: _root_.dali.LabelledGeneric.Aux[$t, $labelType, $reprType]
     """
   }
 
@@ -238,23 +237,23 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     val argName = TermName(c.freshName("arg$"))
     val className = TypeName(c.freshName("LabelledSingleton$"))
     q"""
-      final class $className extends _root_.codes.quine.labo.dali.LabelledGeneric[$t] {
-        type Repr = _root_.codes.quine.labo.dali.HNil
-        def embed($argName: $t): Repr = _root_.codes.quine.labo.dali.HNil
+      final class $className extends _root_.dali.LabelledGeneric[$t] {
+        type Repr = _root_.dali.HNil
+        def embed($argName: $t): Repr = _root_.dali.HNil
         def project($argName: Repr): $t = $singleton
         type Label = $labelType
       }
-      new $className: _root_.codes.quine.labo.dali.LabelledGeneric.Aux[$t, $labelType, _root_.codes.quine.labo.dali.HNil]
+      new $className: _root_.dali.LabelledGeneric.Aux[$t, $labelType, _root_.dali.HNil]
     """
   }
 
   private[this] def materializeLabelledCoproduct(t: Type): Tree = {
     val children = childrenOf(t)
 
-    val reprType = children.foldRight(tq"_root_.codes.quine.labo.dali.CNil": Tree) {
+    val reprType = children.foldRight(tq"_root_.dali.CNil": Tree) {
       case (t, acc) =>
         val labelType = c.internal.constantType(Constant(t.typeSymbol.name.toString))
-        tq"_root_.codes.quine.labo.dali.:+:[_root_.codes.quine.labo.dali.Labelled[$labelType, $t], $acc]"
+        tq"_root_.dali.:+:[_root_.dali.Labelled[$labelType, $t], $acc]"
     }
     val cases = children.zipWithIndex.map { case (t, i) => cq"_: $t => $i" }
 
@@ -262,17 +261,17 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     val argName = TermName(c.freshName("arg$"))
     val className = TypeName(c.freshName("LabelledCoproduct$"))
     q"""
-      final class $className extends _root_.codes.quine.labo.dali.LabelledGeneric[$t] {
+      final class $className extends _root_.dali.LabelledGeneric[$t] {
         type Repr = $reprType
         def embed($argName: $t): Repr =
-          _root_.codes.quine.labo.dali.Coproduct.unsafeApply($argName match { case ..$cases }, Labelled[String with Singleton]($argName)).asInstanceOf[Repr]
+          _root_.dali.Coproduct.unsafeApply($argName match { case ..$cases }, Labelled[String with Singleton]($argName)).asInstanceOf[Repr]
         def project($argName: Repr): $t =
-          _root_.codes.quine.labo.dali.Coproduct.unsafeGet($argName)
-            .asInstanceOf[_root_.codes.quine.labo.dali.Labelled[_root_.java.lang.String with _root_.scala.Singleton, $t]]
+          _root_.dali.Coproduct.unsafeGet($argName)
+            .asInstanceOf[_root_.dali.Labelled[_root_.java.lang.String with _root_.scala.Singleton, $t]]
             .value
         type Label = $labelType
       }
-      new $className: _root_.codes.quine.labo.dali.LabelledGeneric.Aux[$t, $labelType, $reprType]
+      new $className: _root_.dali.LabelledGeneric.Aux[$t, $labelType, $reprType]
     """
   }
 
@@ -304,17 +303,17 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     val (reprCons, reprPattern) = productRepr(names)(name => q"$name", name => pq"$name")
 
     val reprTypes = fields.map {
-      case (_, t) if t =:= paramType => tq"_root_.codes.quine.labo.dali.higher.Param1"
+      case (_, t) if t =:= paramType => tq"_root_.dali.higher.Param1"
       case (_, t) if hasParamType(t, paramType) =>
         val lambdaTypeName = TypeName(c.freshName("Lambda$"))
         val newParamName = TypeName(c.freshName("A$"))
         val t1 = replaceParamType(t, paramType, newParamName)
         val lambda = tq"{type $lambdaTypeName[$newParamName] = $t1}"
-        tq"_root_.codes.quine.labo.dali.higher.Rec1[($lambda)#$lambdaTypeName]"
-      case (_, t) => tq"_root_.codes.quine.labo.dali.higher.Const1[$t]"
+        tq"_root_.dali.higher.Rec1[($lambda)#$lambdaTypeName]"
+      case (_, t) => tq"_root_.dali.higher.Const1[$t]"
     }
-    val reprType = reprTypes.foldRight(tq"_root_.codes.quine.labo.dali.higher.HNil1": Tree) {
-      case (t, acc) => tq"_root_.codes.quine.labo.dali.higher.:**:[$t, $acc]"
+    val reprType = reprTypes.foldRight(tq"_root_.dali.higher.HNil1": Tree) {
+      case (t, acc) => tq"_root_.dali.higher.:**:[$t, $acc]"
     }
 
     val argName = TermName(c.freshName("a$"))
@@ -323,14 +322,14 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
 
     val className = TypeName(c.freshName("Product1$"))
     q"""
-      final class $className extends _root_.codes.quine.labo.dali.higher.Generic1[$typeCons] {
+      final class $className extends _root_.dali.higher.Generic1[$typeCons] {
         type Repr1 = $reprType
         def embed[$newParamName]($argName: $newTypeA): Repr1#Apply[$newParamName] =
           $argName match { case $pattern => $reprCons }
         def project[$newParamName]($argName: Repr1#Apply[$newParamName]): $newTypeA =
           $argName match { case $reprPattern => $cons }
       }
-      new $className: _root_.codes.quine.labo.dali.higher.Generic1.Aux[$typeCons, $reprType]
+      new $className: _root_.dali.higher.Generic1.Aux[$typeCons, $reprType]
     """
   }
 
@@ -341,7 +340,7 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
       val lambdaTypeName = TypeName(c.freshName("Λ$"))
       val newParamName = TypeName(c.freshName("A$"))
       val t1 = replaceParamType(t, paramType, newParamName)
-      tq"_root_.codes.quine.labo.dali.higher.Rec1[({type $lambdaTypeName[$newParamName] = $t1})#$lambdaTypeName]"
+      tq"_root_.dali.higher.Rec1[({type $lambdaTypeName[$newParamName] = $t1})#$lambdaTypeName]"
     }
 
     val argName = TermName(c.freshName("a$"))
@@ -349,21 +348,21 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
     val newTypeA = replaceParamType(typeA, paramType, newParamName)
     val newChildren = children.map(child => replaceParamType(child, paramType, newParamName))
 
-    val reprType = reprs.foldRight(tq"_root_.codes.quine.labo.dali.higher.CNil1": Tree) {
-      case (t, acc) => tq"_root_.codes.quine.labo.dali.higher.:++:[$t, $acc]"
+    val reprType = reprs.foldRight(tq"_root_.dali.higher.CNil1": Tree) {
+      case (t, acc) => tq"_root_.dali.higher.:++:[$t, $acc]"
     }
     val cases = newChildren.zipWithIndex.map { case (t, i) => cq"_: $t => $i" }
 
     val className = TypeName(c.freshName("Coproduct1$"))
     q"""
-      final class $className extends _root_.codes.quine.labo.dali.higher.Generic1[$typeCons] {
+      final class $className extends _root_.dali.higher.Generic1[$typeCons] {
         type Repr1 = $reprType
         def embed[$newParamName]($argName: $newTypeA): Repr1#Apply[$newParamName] =
-          _root_.codes.quine.labo.dali.Coproduct.unsafeApply($argName match { case ..$cases }, $argName).asInstanceOf[Repr1#Apply[$newParamName]]
+          _root_.dali.Coproduct.unsafeApply($argName match { case ..$cases }, $argName).asInstanceOf[Repr1#Apply[$newParamName]]
         def project[$newParamName]($argName: Repr1#Apply[$newParamName]): $newTypeA =
-          _root_.codes.quine.labo.dali.Coproduct.unsafeGet($argName).asInstanceOf[$newTypeA]
+          _root_.dali.Coproduct.unsafeGet($argName).asInstanceOf[$newTypeA]
       }
-      new $className: _root_.codes.quine.labo.dali.higher.Generic1.Aux[$typeCons, $reprType]
+      new $className: _root_.dali.higher.Generic1.Aux[$typeCons, $reprType]
     """
   }
 }
