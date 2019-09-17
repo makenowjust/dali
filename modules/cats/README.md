@@ -34,18 +34,20 @@ res1: MyList[Int] = MyCons(2,MyNil())
 Status
 ----
 
-`dali-cats` provides auto derivations for these cats typeclasses:
+There are `cats` typeclasses whose instance can be derivated by `dali-cats`:
 
 - `Show`
-- `SemigroupK` (only for `case class`)
-- `MonoidK` (only for `case class`)
+- `SemigroupK`†
+- `MonoidK`†
 - `Foldable`
 - `Functor`
 - `Traverse`
-- `Apply` (only for `case class`)
-- `Applicative` (only for `case class`)
-- `Alternative` (only for `case class`)
-- `FlatMap` (only for `case class`)
-- `Monad` (only for `case class`)
+- `Apply`†
+- `Applicative`†
+- `Alternative`†
+- `FlatMap`†
+- `Monad`†
+
+(† auto derivation for the typeclass marked this symbol only supports `case class`.)
 
 [cats]: https://typelevel.org/cats/
