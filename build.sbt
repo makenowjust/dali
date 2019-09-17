@@ -23,7 +23,7 @@ val commonSettings = Seq(
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "labo",
+    name := "labo"
   )
   .dependsOn(core, cats)
   .aggregate(core, cats)
@@ -31,7 +31,7 @@ lazy val root = project
 lazy val core = project
   .in(file("modules/core"))
   .settings(
-    name := "dal-core",
+    name := "dali-core",
     libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value,
     libraryDependencies += "io.monix" %% "minitest" % "2.6.0" % Test,
     testFrameworks += new TestFramework("dali.MinitestFramework"),
