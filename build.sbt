@@ -1,3 +1,5 @@
+import xerial.sbt.Sonatype._
+
 ThisBuild / scalaVersion := "2.13.0"
 ThisBuild / scalacOptions ++= Seq(
   "-encoding",
@@ -19,7 +21,11 @@ val commonSettings = Seq(
   Compile / doc / scalacOptions ++= Seq("-diagrams", "-diagrams-max-classes", "10"),
   resolvers += Resolver.sonatypeRepo("releases"),
   addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
+  sonatypeProjectHosting := Some(
+    GitHubHosting(user = "MakeNowJust", repository = "dali", email = "make.just.on@gmail.com")
+  ),
+  licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
 )
 
 lazy val root = project
