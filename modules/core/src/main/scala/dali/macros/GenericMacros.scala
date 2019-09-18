@@ -268,7 +268,6 @@ class GenericMacros(private[dali] val c: whitebox.Context) {
         def project($argName: Repr): $t =
           _root_.dali.Coproduct.unsafeGet($argName)
             .asInstanceOf[_root_.dali.Labelled[_root_.java.lang.String with _root_.scala.Singleton, $t]]
-            .value
         type Label = $labelType
       }
       new $className: _root_.dali.LabelledGeneric.Aux[$t, $labelType, $reprType]

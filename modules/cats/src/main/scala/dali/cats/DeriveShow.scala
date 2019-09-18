@@ -42,7 +42,7 @@ object GShow {
 
   implicit def labelled[L <: String with Singleton, A](implicit A: => Show[A]): GShow[Labelled[L, A]] =
     new GShow[Labelled[L, A]] {
-      def gshow(r: Labelled[L, A]): String = A.show(r.value)
+      def gshow(r: Labelled[L, A]): String = A.show(r)
     }
 }
 
@@ -55,18 +55,18 @@ trait DeriveShow extends DeriveShowLowPriority {
 
 private[cats] trait DeriveShowLowPriority {
   implicit def deriveShowForProduct[A, L <: String with Singleton, R <: HList](
-    implicit ARL: LabelledGeneric.Aux[A, L, R],
+    implicit ALR: LabelledGeneric.Aux[A, L, R],
     L: ValueOf[L],
     R: GShow[R]
   ): Show[A] =
     new Show[A] {
       def show(a: A): String = {
-        val prefix = ARL.label match {
+        val prefix = valueOf[L] match {
           case s"Tuple$_" => ""
           case "Unit"     => ""
           case l          => l
         }
-        R.gshow(ARL.embed(a)) match {
+        R.gshow(ALR.embed(a)) match {
           case "" if prefix != "" => prefix
           case v                  => s"$prefix($v)"
         }
