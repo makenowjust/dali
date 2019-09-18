@@ -50,11 +50,13 @@ import macros._
  * }}}
  */
 trait Generic[A] {
+
   /** [[HList]] or [[Coproduct]] type that represents type A. */
   type Repr
 
   /** Convert type A value into Repr */
   def embed(a: A): Repr
+
   /** Convert Repr into type A value */
   def project(r: Repr): A
 }
