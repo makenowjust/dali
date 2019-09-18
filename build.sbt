@@ -10,6 +10,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-Xlint",
   "-Ymacro-annotations"
 )
+ThisBuild / turbo := true
 
 val commonSettings = Seq(
   Compile / console / scalacOptions += "-Ywarn-unused:-imports,_",
