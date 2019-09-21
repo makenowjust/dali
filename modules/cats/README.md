@@ -3,6 +3,8 @@ dali-cats
 
 > [cats] typeclasses instance derivation for simple ADTs.
 
+[![ScalaDoc][scaladoc-badge]](https://javadoc.io/doc/codes.quine/dali-cats_2.13)
+
 Usage
 ----
 
@@ -54,3 +56,4 @@ There are `cats` typeclasses whose instance can be derivated by `dali-cats`:
 († auto derivation for the typeclass marked this symbol only supports `case class`.)
 
 [cats]: https://typelevel.org/cats/
+[scaladoc-badge]: https://img.shields.io/badge/ScalaDoc-Reference-black?style=for-the-badge&logo=scala&colorA=D01F28&logoColor=white

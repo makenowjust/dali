@@ -3,6 +3,8 @@ dali-core
 
 > core module of dali.
 
+[![ScalaDoc][scaladoc-badge]](https://javadoc.io/doc/codes.quine/dali-core_2.13)
+
 It provides:
 
 - `HList` and `Coproduct`: data types for abstract representation of simple ADTs.
@@ -34,3 +36,4 @@ But I (MakeNowJust) planed to support many useful operators as another library f
 
 [shapeless]: https://github.com/milessabin/shapeless
 [minitest]: https://github.com/monix/minitest
+[scaladoc-badge]: https://img.shields.io/badge/ScalaDoc-Reference-black?style=for-the-badge&logo=scala&colorA=D01F28&logoColor=white
