@@ -37,6 +37,9 @@ Status
 There are `cats` typeclasses whose instance can be derivated by `dali-cats`:
 
 - `Show`
+- `Eq`
+- `PartialOrder`
+- `Order`†
 - `SemigroupK`†
 - `MonoidK`†
 - `Foldable`

@@ -9,13 +9,8 @@ import _root_.cats.instances.int._
 import minitest.SimpleTestSuite
 
 object DeriveShowSuite extends SimpleTestSuite {
-  // NOTE: it is necessary to avoid "diverging implicit expansion" error on Show[MyTree[Int]] derivation.
-  //       But I don't know why it is needed really. Is this Scala compiler BUG?
-  //       And bonus, it is not needed when there is custom Show[MyList[A]] instance instaed of derivated instance.
-  implicit def showList[A: Show]: Show[MyList[A]] = {
-    import derive.show._
-    Show[MyList[A]]
-  }
+  implicit def showList[A: Show]: Show[MyList[A]] = deriveShowForCoproduct
+  implicit def showTree[A: Show]: Show[MyTree[A]] = deriveShowForProduct
 
   test("DeriveShow: MyList") {
     assertEquals(

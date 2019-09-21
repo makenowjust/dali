@@ -20,7 +20,6 @@ val commonSettings = Seq(
   Test / console / scalacOptions += "-Ywarn-unused:-imports,_",
   Compile / doc / scalacOptions ++= Seq("-diagrams", "-diagrams-max-classes", "10"),
   resolvers += Resolver.sonatypeRepo("releases"),
-  addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0"),
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
   sonatypeProjectHosting := Some(
     GitHubHosting(user = "MakeNowJust", repository = "dali", email = "make.just.on@gmail.com")

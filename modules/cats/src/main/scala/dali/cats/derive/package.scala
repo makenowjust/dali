@@ -2,6 +2,9 @@ package dali
 package cats
 package derive
 
+package object eq extends DeriveEq
+package object order extends DeriveOrder
+package object partialOrder extends DerivePartialOrder
 package object show extends DeriveShow
 
 package object alternative extends DeriveAlternative

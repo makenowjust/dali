@@ -8,7 +8,7 @@ trait GShow[R] {
 }
 
 object GShow {
-  def apply[R: GShow]: GShow[R] = implicitly
+  @inline def apply[R: GShow]: GShow[R] = implicitly
 
   implicit def hcons[H: GShow, T <: HList: GShow]: GShow[H :*: T] =
     new GShow[H :*: T] {
