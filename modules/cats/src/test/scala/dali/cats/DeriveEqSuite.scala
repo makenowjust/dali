@@ -1,7 +1,7 @@
 package dali
 package cats
 
-import data._
+import data._, instances._
 import derive.eq._
 
 import _root_.cats.kernel.instances.int._
