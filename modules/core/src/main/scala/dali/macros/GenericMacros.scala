@@ -3,7 +3,7 @@ package macros
 
 import scala.reflect.macros.whitebox
 
-class GenericMacros(private[dali] val c: whitebox.Context) {
+class GenericMacros(private[macros] val c: whitebox.Context) {
   import c.universe._
 
   private[this] def abort(message: String): Nothing =
