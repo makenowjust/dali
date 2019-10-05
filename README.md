@@ -3,7 +3,7 @@ dali
 
 > Modern, Lightweight and Simple Generic Programming Library
 >
-> (i.e. [shapeless] alternative for Scala 2.13 era)
+> (i.e. [shapeless] alternative for Scala 2.13)
 
 [![Coverage][codecov-badge]](https://codecov.io/gh/MakeNowJust/dali/branch/master)
 
