@@ -30,8 +30,8 @@ val commonSettings = Seq(
 lazy val root = project
   .in(file("."))
   .settings(name := "dali")
-  .dependsOn(core, cats)
-  .aggregate(core, cats)
+  .dependsOn(core, cats, singleton)
+  .aggregate(core, cats, singleton)
 
 lazy val core = project
   .in(file("modules/core"))
