@@ -57,3 +57,15 @@ lazy val cats = project
     commonSettings
   )
   .dependsOn(core, core % "test->test")
+
+lazy val singleton = project
+  .in(file("modules/singleton"))
+  .settings(
+    name := "dali-singleton",
+    description := "dali-singleton provides type-level singleton operations",
+    libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value,
+    libraryDependencies += "io.monix" %% "minitest" % "2.6.0" % Test,
+    testFrameworks += new TestFramework("dali.MinitestFramework"),
+    commonSettings
+  )
+  .dependsOn(core % "test->test")
