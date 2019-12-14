@@ -8,9 +8,9 @@ package object singleton {
   type toFloat[E] = Expr.Unary[Op.ToFloat, E]
   type toDouble[E] = Expr.Unary[Op.ToDouble, E]
 
-  type +[E, F] = Expr.Binary[Op.Add, E, F]
-  type -[E, F] = Expr.Binary[Op.Sub, E, F]
-  type *[E, F] = Expr.Binary[Op.Mul, E, F]
-  type /[E, F] = Expr.Binary[Op.Div, E, F]
-  type %[E, F] = Expr.Binary[Op.Mod, E, F]
+  type |+|[E, F] = Expr.Binary[Op.Add, E, F]
+  type |-|[E, F] = Expr.Binary[Op.Sub, E, F]
+  type |*|[E, F] = Expr.Binary[Op.Mul, E, F]
+  type |/|[E, F] = Expr.Binary[Op.Div, E, F]
+  type |%|[E, F] = Expr.Binary[Op.Mod, E, F]
 }
