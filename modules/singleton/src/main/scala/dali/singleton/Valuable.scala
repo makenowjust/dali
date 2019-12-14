@@ -18,4 +18,3 @@ object Valuable {
 
   implicit def evaluate[E, V]: Aux[E, V] = macro ValuableMacros.evaluate[E]
 }
-

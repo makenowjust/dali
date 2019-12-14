@@ -76,27 +76,28 @@ class ValuableMacros(private[singleton] val c: whitebox.Context) {
 
   private[this] def evaluateType(e: Type): Value =
     e.dealias match {
-    case ToInt(e) => Value.toInt(evaluateType(e))
-    case ToLong(e) => Value.toLong(evaluateType(e))
-    case ToFloat(e) => Value.toFloat(evaluateType(e))
-    case ToDouble(e) => Value.toDouble(evaluateType(e))
-    case Add(l, r) => Value.add(evaluateType(l), evaluateType(r))
-    case Sub(l, r) => Value.sub(evaluateType(l), evaluateType(r))
-    case Mul(l, r) => Value.mul(evaluateType(l), evaluateType(r))
-    case Div(l, r) => Value.div(evaluateType(l), evaluateType(r))
-    case Mod(l, r) => Value.mod(evaluateType(l), evaluateType(r))
-    case Eq(l, r) => Value.eq(evaluateType(l), evaluateType(r))
-    case ConstantType(c) => c.value match {
-      case v: Int     => IntValue(v)
-      case v: Long    => LongValue(v)
-      case v: Float   => FloatValue(v)
-      case v: Double  => DoubleValue(v)
-      case v: Boolean => BooleanValue(v)
-      case v: String  => StringValue(v)
-      case _          => abort("unknown constant")
+      case ToInt(e)    => Value.toInt(evaluateType(e))
+      case ToLong(e)   => Value.toLong(evaluateType(e))
+      case ToFloat(e)  => Value.toFloat(evaluateType(e))
+      case ToDouble(e) => Value.toDouble(evaluateType(e))
+      case Add(l, r)   => Value.add(evaluateType(l), evaluateType(r))
+      case Sub(l, r)   => Value.sub(evaluateType(l), evaluateType(r))
+      case Mul(l, r)   => Value.mul(evaluateType(l), evaluateType(r))
+      case Div(l, r)   => Value.div(evaluateType(l), evaluateType(r))
+      case Mod(l, r)   => Value.mod(evaluateType(l), evaluateType(r))
+      case Eq(l, r)    => Value.eq(evaluateType(l), evaluateType(r))
+      case ConstantType(c) =>
+        c.value match {
+          case v: Int     => IntValue(v)
+          case v: Long    => LongValue(v)
+          case v: Float   => FloatValue(v)
+          case v: Double  => DoubleValue(v)
+          case v: Boolean => BooleanValue(v)
+          case v: String  => StringValue(v)
+          case _          => abort("unknown constant")
+        }
+      case _ => abort(s"unknown type: ${showRaw(e)}")
     }
-    case _ => abort(s"unknown type: ${showRaw(e)}")
-  }
 
   private[this] def valueToType(v: Value): Type = v match {
     case IntValue(v)     => c.internal.constantType(Constant(v))
@@ -104,7 +105,7 @@ class ValuableMacros(private[singleton] val c: whitebox.Context) {
     case FloatValue(v)   => c.internal.constantType(Constant(v))
     case DoubleValue(v)  => c.internal.constantType(Constant(v))
     case BooleanValue(v) => c.internal.constantType(Constant(v))
-    case StringValue(v) => c.internal.constantType(Constant(v))
+    case StringValue(v)  => c.internal.constantType(Constant(v))
   }
 
   private[this] def valueToLiteral(v: Value): Tree = v match {

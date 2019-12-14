@@ -8,7 +8,8 @@ import minitest.SimpleTestSuite
 object ValuableSuite extends SimpleTestSuite {
   test("Valuable: binary") {
     def assertBinary[
-      X, Y,
+      X,
+      Y,
       Add: ValueOf: Valuable.Aux[X |+| Y, *],
       Sub: ValueOf: Valuable.Aux[X |-| Y, *],
       Mul: ValueOf: Valuable.Aux[X |*| Y, *],
@@ -24,7 +25,7 @@ object ValuableSuite extends SimpleTestSuite {
 
     assertBinary[4, 3, 7, 1, 12, 1, 1]
     assertBinary[4L, 3L, 7L, 1L, 12L, 1L, 1L]
-    assertBinary[4.0F, 2.0F, 6.0F, 2.0F, 8.0F, 2.0F, 0.0F]
+    assertBinary[4.0f, 2.0f, 6.0f, 2.0f, 8.0f, 2.0f, 0.0f]
     assertBinary[4.0, 2.0, 6.0, 2.0, 8.0, 2.0, 0.0]
   }
 
