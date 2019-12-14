@@ -1,6 +1,9 @@
 import xerial.sbt.Sonatype._
 
-ThisBuild / scalaVersion := "2.13.0"
+val minitestVersion = "2.7.0"
+val catsVersion = "2.0.0"
+
+ThisBuild / scalaVersion := "2.13.1"
 ThisBuild / scalacOptions ++= Seq(
   "-encoding",
   "UTF-8",
@@ -20,7 +23,7 @@ val commonSettings = Seq(
   Test / console / scalacOptions += "-Ywarn-unused:-imports,_",
   Compile / doc / scalacOptions ++= Seq("-diagrams", "-diagrams-max-classes", "10"),
   resolvers += Resolver.sonatypeRepo("releases"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
+  addCompilerPlugin(("org.typelevel" %% "kind-projector" % "0.11.0").cross(CrossVersion.full)),
   sonatypeProjectHosting := Some(
     GitHubHosting(user = "MakeNowJust", repository = "dali", email = "make.just.on@gmail.com")
   ),
@@ -39,8 +42,8 @@ lazy val core = project
     name := "dali-core",
     description := "dali-core provides the basic classes for generic programming",
     libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value,
-    libraryDependencies += "io.monix" %% "minitest" % "2.6.0" % Test,
-    testFrameworks += new TestFramework("dali.MinitestFramework"),
+    libraryDependencies += "io.monix" %% "minitest" % minitestVersion % Test,
+    testFrameworks += new TestFramework("minitest.runner.Framework"),
     commonSettings
   )
 
@@ -49,11 +52,11 @@ lazy val cats = project
   .settings(
     name := "dali-cats",
     description := "dali-cats provides auto-derivations for cats typeclasses",
-    libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0",
-    libraryDependencies += "org.typelevel" %% "cats-laws" % "2.0.0" % Test,
-    libraryDependencies += "io.monix" %% "minitest" % "2.6.0" % Test,
-    libraryDependencies += "io.monix" %% "minitest-laws" % "2.6.0" % Test,
-    testFrameworks += new TestFramework("dali.MinitestFramework"),
+    libraryDependencies += "org.typelevel" %% "cats-core" % catsVersion,
+    libraryDependencies += "org.typelevel" %% "cats-laws" % catsVersion % Test,
+    libraryDependencies += "io.monix" %% "minitest" % minitestVersion % Test,
+    libraryDependencies += "io.monix" %% "minitest-laws" % minitestVersion % Test,
+    testFrameworks += new TestFramework("minitest.runner.Framework"),
     commonSettings
   )
   .dependsOn(core, core % "test->test")
