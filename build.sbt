@@ -23,7 +23,7 @@ val commonSettings = Seq(
   Test / console / scalacOptions += "-Ywarn-unused:-imports,_",
   Compile / doc / scalacOptions ++= Seq("-diagrams", "-diagrams-max-classes", "10"),
   resolvers += Resolver.sonatypeRepo("releases"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
+  addCompilerPlugin(("org.typelevel" %% "kind-projector" % "0.11.0").cross(CrossVersion.full)),
   sonatypeProjectHosting := Some(
     GitHubHosting(user = "MakeNowJust", repository = "dali", email = "make.just.on@gmail.com")
   ),
