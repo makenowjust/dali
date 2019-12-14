@@ -1,8 +1,6 @@
 package dali
 package higher
 
-import data._
-
 trait Functor[F[_]] {
   def map[A, B](fa: F[A])(a: A => B): F[B]
 }
